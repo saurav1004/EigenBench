@@ -47,10 +47,13 @@ def group_models_for_vllm(
 
         try:
             if subfolder:
-                # Subfolder-based repo: download entire repo once, resolve locally
+                # Subfolder-based repo: download only the needed subfolder
                 if repo_id not in lora_repo_cache:
-                    print(f"Downloading repo {repo_id} (all subfolders)...")
-                    lora_repo_cache[repo_id] = snapshot_download(repo_id=repo_id)
+                    print(f"Downloading repo {repo_id} (subfolder: {subfolder})...")
+                    lora_repo_cache[repo_id] = snapshot_download(
+                        repo_id=repo_id,
+                        allow_patterns=[f"{subfolder}/*"],
+                    )
                 local_repo_dir = lora_repo_cache[repo_id]
                 adapter_config_path = os.path.join(local_repo_dir, subfolder, "adapter_config.json")
             else:
@@ -95,7 +98,10 @@ def group_models_for_vllm(
                 cache_key = hf_path
                 if cache_key not in lora_repo_cache:
                     print(f"Downloading LoRA weights for {nick} from {hf_path}")
-                    lora_repo_cache[cache_key] = snapshot_download(repo_id=repo_id)
+                    lora_repo_cache[cache_key] = snapshot_download(
+                        repo_id=repo_id,
+                        ignore_patterns=["checkpoints/*"],
+                    )
                 lora_local_path = lora_repo_cache[cache_key]
             local_base_models[base_model_id]["loras"][nick] = lora_local_path
         else:
