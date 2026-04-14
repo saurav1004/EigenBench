@@ -7,7 +7,6 @@ deprecated/
 .venv
 
 # Run artifacts
-runs/*
 !runs/example/
 !runs/example/**
 runs/example/**/__pycache__/
@@ -18,7 +17,7 @@ runs/example/btd_d*/
 # Data policy:
 # - Keep constitution files in version control
 # - Ignore all other data payloads
-data/*
+
 !data/constitutions/
 !data/constitutions/**
 
