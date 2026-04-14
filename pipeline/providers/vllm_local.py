@@ -120,12 +120,14 @@ class VLLMEngineManager:
 
     def __enter__(self) -> LLM:
         print(f"\n--- Starting vLLM engine for {self.base_model_id} ---")
+        os.environ["VLLM_ALLOW_LONG_MAX_MODEL_LEN"] = "1"
         self.llm = LLM(
             model=self.base_model_id,
             enable_lora=self.enable_lora,
             max_lora_rank=64 if self.enable_lora else None,
             gpu_memory_utilization=0.9,
             enforce_eager=True,
+            max_model_len=8192,
         )
         return self.llm
 
