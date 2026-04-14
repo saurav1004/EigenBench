@@ -5,7 +5,7 @@ Run spec for Normative Drift dose-response experiment.
 All trained on bad medical advice (config 0_1_0, 1 epoch), except Base.
 Grey-area scenarios (115) with Claude constitution (39 criteria).
 
-All models served locally via vLLM — no OpenRouter.
+All models served locally via vLLM.
   - Base + R1 + R8 + R64 share a single vLLM engine (Qwen2.5-14B-Instruct + 3 LoRA adapters)
   - Full FT runs on a separate vLLM engine (different full weights)
 
@@ -35,7 +35,7 @@ RUN_SPEC = {
     },
     "collection": {
         "enabled": True,
-        "cached_responses_path": None,
+        "cached_responses_path": "runs/normative_drift/cached_responses.jsonl",
         "allow_ties": True,
         "sampler_mode": "all_to_all",
     },
