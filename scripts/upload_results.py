@@ -213,6 +213,11 @@ def stage_run(name: str, run_dir: Path, staging_dir: Path) -> tuple[dict, Path]:
         if img_path.exists():
             shutil.copy2(img_path, dest / "images" / img_name)
 
+    # Evaluations
+    eval_path = run_dir / "evaluations.jsonl"
+    if eval_path.exists():
+        shutil.copy2(eval_path, dest / "evaluations.jsonl")
+
     return meta, summary_path
 
 
@@ -248,8 +253,10 @@ def build_index_entry(name: str, meta: dict, summary_path: Path, group: str | No
     top = summary[0] if summary else {}
     constitution_path = meta.get("constitution", {}).get("path", "")
     constitution_name = Path(constitution_path).stem if constitution_path else ""
+    constitution_name = constitution_name.removeprefix("oct_")
     dataset_path = meta.get("dataset", {}).get("path", "")
     scenario_name = Path(dataset_path).stem if dataset_path else ""
+    scenario_name = scenario_name.removeprefix("oct_")
 
     ds = meta.get("dataset", {})
     start = ds.get("start", 0)
