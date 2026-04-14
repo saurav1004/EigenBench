@@ -126,7 +126,6 @@ class VLLMEngineManager:
             max_lora_rank=64 if self.enable_lora else None,
             gpu_memory_utilization=0.9,
             enforce_eager=True,
-            max_model_len=8192,
         )
         return self.llm
 
