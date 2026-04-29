@@ -21,12 +21,22 @@ runs/example/btd_d*/
 data/*
 !data/constitutions/
 !data/constitutions/**
+!data/scenarios/
+!data/scenarios/loving_sycophancy_boundary_v0.json
+!data/scenarios/loving_sycophancy_boundary_v1.json
+!data/scenarios/loving_sycophancy_boundary_v2.json
+!data/scenarios/loving_sycophancy_tension_v0.json
 
 !runs/matrix/
 runs/matrix/*/
 !runs/matrix/**/spec.py
 runs/matrix/**/btd_d2/
 runs/matrix/**/evaluations.jsonl
+
+!runs/loving_vs_sycophancy_boundary/
+!runs/loving_vs_sycophancy_boundary/spec.py
+runs/loving_vs_sycophancy_boundary/evaluations.jsonl
+runs/loving_vs_sycophancy_boundary/btd_d*/
 
 notebooks/character_train_matrix.ipynb
 notebooks/misc.ipynb
