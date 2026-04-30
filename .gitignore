@@ -44,6 +44,11 @@ runs/loving_vs_sycophancy_boundary/btd_d*/
 runs/loving_vs_sycophancy_structured/evaluations.jsonl
 runs/loving_vs_sycophancy_structured/btd_d*/
 
+!runs/loving_vs_sycophancy_structured_shadow/
+!runs/loving_vs_sycophancy_structured_shadow/spec.py
+runs/loving_vs_sycophancy_structured_shadow/evaluations.jsonl
+runs/loving_vs_sycophancy_structured_shadow/btd_d*/
+
 notebooks/character_train_matrix.ipynb
 notebooks/misc.ipynb
 notebooks/Personas.ipynb

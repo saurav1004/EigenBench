@@ -180,6 +180,21 @@ def _phase1_vllm(
         if not models_needed:
             continue
 
+        pending_response = False
+        for nick, _ in models_needed:
+            for assignment in eval_assignments:
+                s_idx = assignment["scenario_index"]
+                if nick in assignment["eval_nicks"] and nick not in eval_responses[s_idx]:
+                    pending_response = True
+                    break
+            if pending_response:
+                break
+
+        if not pending_response:
+            if verbose:
+                print(f"  vLLM responses skipped for {base_model_id}; all local responses cached")
+            continue
+
         with VLLMEngineManager(base_model_id, enable_lora=has_loras) as llm:
             lora_requests = prepare_lora_requests(llm, base_info["loras"] if has_loras else {})
             sampling_params = SamplingParams(max_tokens=max_tokens, temperature=0.7)
@@ -686,7 +701,7 @@ def collect_mixed_evaluations(
 
     Returns the list of all evaluation records produced.
     """
-    from pipeline.utils import append_records
+    from pipeline.utils import append_records, load_records
 
     model_nicks = list(models.keys())
     criteria_text = "\n".join(criteria)
@@ -716,6 +731,20 @@ def collect_mixed_evaluations(
     # Phase 1: Evaluee Responses
     print("Phase 1: Generate evaluee responses")
     eval_responses: dict = defaultdict(dict)
+    cached_responses_path = collection_cfg.get("cached_responses_path")
+    if cached_responses_path:
+        cached_records = load_records(cached_responses_path)
+        selected_indices = {scenario_index for scenario_index, _ in selected_scenarios}
+        for entry in cached_records:
+            if not isinstance(entry, dict):
+                continue
+            scenario_index = entry.get("scenario_index")
+            responses = entry.get("responses", {})
+            if scenario_index in selected_indices and isinstance(responses, dict):
+                eval_responses[scenario_index].update(responses)
+        if verbose:
+            cached_count = sum(len(responses) for responses in eval_responses.values())
+            print(f"  Loaded {cached_count} cached responses from {cached_responses_path}")
 
     _phase1_openrouter(eval_assignments, openrouter_models, eval_responses, max_tokens, verbose)
     if has_local:
